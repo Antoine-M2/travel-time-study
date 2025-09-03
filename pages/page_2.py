@@ -18,19 +18,25 @@ commerce_map_legend = {
 }
 transport_map = {
     0: "driving-car",
-    1: "cycling-regular",
-    2: "cycling-electric",
+    1: "cycling-electric",
+    2: "cycling-regular",
 }
 transport_map_bouton = {
     0: "🚗 Voiture",
-    1: "🚲 Vélo",
-    2: "🔋Vélo électrique ",
+    1: "🔋Vélo électrique ",
+    2: "🚲 Vélo",
 }
 transport_map_legend = {
-    0: "voiture",
-    1: "vélo",
-    2: "vélo électrique",
+    0: "en voiture",
+    1: "à vélo électrique",
+    2: "à vélo",
 }
+
+@st.cache_data
+def load_data(url):
+	return pd.read_csv(url, engine="python")
+
+df_communes = load_data("processed/data/pop_iso_communes_final.csv")
 
 # ------------------------------
 # Fonctions
@@ -53,8 +59,8 @@ def population_charts_between_interval(df_communes, minimum=0, maximum=100_000_0
 
 	mapping = {
 		"driving-car":     "Voiture", 
-		"cycling-regular": "Vélo", 
-		"cycling-electric":"Vélo électrique"
+		"cycling-electric":"Vélo électrique",
+		"cycling-regular": "Vélo"
 	}
 	df_chart["transport_label"] = df_chart["transport"].map(mapping)
 	df_chart["maximum"] = maximum
@@ -76,7 +82,6 @@ selection_commerce = st.segmented_control(
 )
 
 # Création du dataframe
-df_communes = pd.read_csv("processed/data/pop_iso_communes_final.csv", engine="python")
 df_chart = population_charts_between_interval(df_communes)
 
 # Affichage des données
@@ -165,6 +170,52 @@ for df, tab in zip(liste_df_charts, liste_tabs):
 	tab.plotly_chart(fig)
 
 
+
+# ------------------------------
+st.subheader("Sélectionnez l'intervalle")
+# ------------------------------
+
+intervalle = st.slider("Sélectionnez un intervalle de population :", 0, 100_000, (5_000, 50_000), step=50)
+
+# Bouton
+selection_commerce = st.segmented_control(
+    "Type de commerce",
+    options=commerce_map_bouton.keys(),
+    format_func=lambda option: commerce_map_bouton[option],
+    selection_mode="single",
+    default=0,
+    key="2",
+)
+
+# Création du dataframe
+df_chart = population_charts_between_interval(df_communes, 
+											  minimum=intervalle[0], maximum=intervalle[1])
+
+# Affichage des données
+labels = {
+	"temps":"Temps de trajet (en min)",
+	"pourcentage":"Pourcentage",
+	"transport_label":"Transport"
+}
+
+commerce_legend = commerce_map_legend[selection_commerce]
+titre = f"Part de la population habitant à X minutes ou moins " \
+		f"d'{commerce_legend}"
+
+commerce = commerce_map[selection_commerce]
+df_select = df_chart[df_chart["type"]==commerce]
+
+fig = px.line(
+	df_select, x="temps", y="pourcentage", color="transport_label", 
+	markers=True, labels=labels,
+)
+fig.update_layout(
+	title_text=titre,
+	yaxis_tickformat='.2%'
+	)
+st.plotly_chart(fig)
+
+
 # ------------------------------
 st.header("Résultats par type de transport")
 # ------------------------------
@@ -176,7 +227,7 @@ selection_commerce = st.segmented_control(
     format_func=lambda option: commerce_map_bouton[option],
     selection_mode="single",
     default=0,
-    key="2",
+    key="3",
 )
 
 selection_transport = st.segmented_control(
@@ -194,13 +245,22 @@ df_select = df_charts[
 						(df_chart["type"]==commerce) & 
  						(df_chart["transport"]==transport)
  					 ]
-df_select["maximum"] = df_select["maximum"].apply(str)
 
 # Affichage des données
 labels = {
 	"temps":"Temps de trajet (en min)",
 	"pourcentage":"Pourcentage",
+	"maximum":"Population",
 }
+mapping = {
+	1_000      :"Moins de 1 000 hab.",
+	5_000      :"1 000 - 4 999 hab.",
+	10_000     :"5 000 - 9 999 hab.",
+	50_000     :"10 000 - 49 999 hab.",
+	100_000    :"50 000 - 99 999 hab.",
+	100_000_000:"100 000+ hab.",
+}
+df_select["maximum"] = df_select["maximum"].map(mapping)
 
 fig = px.bar(
 		df_select, 
@@ -211,8 +271,8 @@ fig = px.bar(
 commerce_legend = commerce_map_legend[selection_commerce]
 transport_legend = transport_map_legend[selection_transport]
 
-titre = f"Part de la population habitant à X minutes ou moins" \
-		f"d'{commerce_legend} en {transport_legend}"
+titre = f"Part de la population habitant à X minutes ou moins " \
+		f"d'{commerce_legend} {transport_legend}"
 
 fig.update_layout(
 	title_text=titre,
