@@ -38,6 +38,7 @@ def load_data(url):
 
 df_communes = load_data("processed/data/pop_iso_communes_final.csv")
 
+
 # ------------------------------
 # Fonctions
 # ------------------------------
@@ -170,7 +171,6 @@ for df, tab in zip(liste_df_charts, liste_tabs):
 	tab.plotly_chart(fig)
 
 
-
 # ------------------------------
 st.subheader("Sélectionnez l'intervalle")
 # ------------------------------
@@ -242,15 +242,15 @@ selection_transport = st.segmented_control(
 df_charts = pd.concat(liste_df_charts)
 commerce, transport = commerce_map[selection_commerce], transport_map[selection_transport]
 df_select = df_charts[
-						(df_chart["type"]==commerce) & 
- 						(df_chart["transport"]==transport)
+						(df_charts["type"]==commerce) & 
+ 						(df_charts["transport"]==transport)
  					 ]
 
 # Affichage des données
 labels = {
 	"temps":"Temps de trajet (en min)",
 	"pourcentage":"Pourcentage",
-	"maximum":"Population",
+	"max_pop":"Population",
 }
 mapping = {
 	1_000      :"Moins de 1 000 hab.",
@@ -260,11 +260,11 @@ mapping = {
 	100_000    :"50 000 - 99 999 hab.",
 	100_000_000:"100 000+ hab.",
 }
-df_select["maximum"] = df_select["maximum"].map(mapping)
+df_select["max_pop"] = df_select["maximum"].map(mapping)
 
 fig = px.bar(
 		df_select, 
-		x="temps", y="pourcentage", color="maximum", barmode="group",
+		x="temps", y="pourcentage", color="max_pop", barmode="group",
 		labels=labels,
 	)
 
