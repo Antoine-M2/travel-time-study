@@ -32,6 +32,11 @@ transport_map_legend = {
     2: "à vélo",
 }
 
+presentation_map_bouton = {
+    0: "📈 Lignes",
+    1: "📊 Barres",
+}
+
 @st.cache_data
 def load_data(url):
 	return pd.read_csv(url, engine="python")
@@ -43,6 +48,47 @@ df_communes = load_data("processed/data/pop_iso_communes_final.csv")
 # Fonctions
 # ------------------------------
 
+def create_line_chart(df, labels, titre, kwargs={}):
+
+	fig = px.line(
+		df, x="temps", y="pourcentage", labels=labels, markers=True, **kwargs,
+	)
+	fig.update_layout(
+		title_text=titre,
+		yaxis_tickformat='.2%',
+	)
+	return fig
+
+def create_bar_chart(df, labels, titre, kwargs={}):
+
+	fig = px.bar(
+		df, x="temps", y="pourcentage", labels=labels, barmode="group", **kwargs,
+	)
+	fig.update_layout(
+		title_text=titre,
+		yaxis_tickformat='.2%',
+		)
+	return fig
+
+def create_button(nom, mapping, default=0):
+
+    try:
+        create_button.counter += 1
+    except AttributeError:
+        create_button.counter = 1
+
+    bouton = st.segmented_control(
+        nom,
+        options=mapping.keys(),
+        format_func=lambda option: mapping[option],
+        selection_mode="single",
+        key=create_button.counter,
+        default=default,
+    )
+
+    return bouton
+
+
 def population_charts_between_interval(df_communes, minimum=0, maximum=100_000_000):
 	cols = df_communes.columns[10:]
 	df_select = df_communes[
@@ -53,8 +99,6 @@ def population_charts_between_interval(df_communes, minimum=0, maximum=100_000_0
 	for i, col in enumerate(cols):
 		df_chart.loc[i] = col.split('_') + [df_select[col].sum()/df_select["population"].sum()]
 	df_chart["temps"] = df_chart["temps"].apply(int) // 60
-
-
 
 	# st.write(df_select[["DCOE_L_LIB", "population"]].sort_values(by=["population"], ascending=False))
 
@@ -73,14 +117,8 @@ st.header("Résultats pour toute la France métropolitaine")
 # ------------------------------
 
 # Bouton
-selection_commerce = st.segmented_control(
-    "Type de commerce",
-    options=commerce_map_bouton.keys(),
-    format_func=lambda option: commerce_map_bouton[option],
-    selection_mode="single",
-    default=0,
-    key="0",
-)
+selection_commerce = create_button("Type de commerce", commerce_map_bouton)
+selection_presentation = create_button("Présentation", presentation_map_bouton)
 
 # Création du dataframe
 df_chart = population_charts_between_interval(df_communes)
@@ -98,15 +136,12 @@ titre = f"Part de la population habitant à X minutes ou moins " \
 
 commerce = commerce_map[selection_commerce]
 df_select = df_chart[df_chart["type"]==commerce]
+kwargs = {"color":"transport_label"}
 
-fig = px.line(
-	df_select, x="temps", y="pourcentage", color="transport_label", 
-	markers=True, labels=labels,
-)
-fig.update_layout(
-	title_text=titre,
-	yaxis_tickformat='.2%'
-	)
+if selection_presentation == 0:
+	fig = create_line_chart(df_select, labels, titre, kwargs)
+elif selection_presentation == 1:
+	fig = create_bar_chart(df_select, labels, titre, kwargs)
 st.plotly_chart(fig)
 
 
@@ -115,14 +150,8 @@ st.header("Résultats par taille de communes")
 # ------------------------------
 
 # Bouton
-selection_commerce = st.segmented_control(
-    "Type de commerce",
-    options=commerce_map_bouton.keys(),
-    format_func=lambda option: commerce_map_bouton[option],
-    selection_mode="single",
-    default=0,
-    key="1",
-)
+selection_commerce = create_button("Type de commerce", commerce_map_bouton)
+selection_presentation = create_button("Présentation", presentation_map_bouton)
 
 # Création des dataframes
 df_chart_1 = population_charts_between_interval(df_communes, minimum=100_000)
@@ -160,14 +189,10 @@ for df, tab in zip(liste_df_charts, liste_tabs):
 	commerce = commerce_map[selection_commerce]
 	df_select = df[df["type"]==commerce]
 
-	fig = px.line(
-		df_select, x="temps", y="pourcentage", color="transport_label", 
-		markers=True, labels=labels,
-	)
-	fig.update_layout(
-		title_text=titre,
-		yaxis_tickformat='.2%'
-		)
+	if selection_presentation == 0:
+		fig = create_line_chart(df_select, labels, titre, kwargs)
+	elif selection_presentation == 1:
+		fig = create_bar_chart(df_select, labels, titre, kwargs)
 	tab.plotly_chart(fig)
 
 
@@ -175,17 +200,12 @@ for df, tab in zip(liste_df_charts, liste_tabs):
 st.subheader("Sélectionnez l'intervalle")
 # ------------------------------
 
-intervalle = st.slider("Sélectionnez un intervalle de population :", 0, 100_000, (5_000, 50_000), step=50)
+intervalle = st.slider("Sélectionnez un intervalle de population :", 
+						0, 100_000, (2_000, 50_000), step=50)
 
 # Bouton
-selection_commerce = st.segmented_control(
-    "Type de commerce",
-    options=commerce_map_bouton.keys(),
-    format_func=lambda option: commerce_map_bouton[option],
-    selection_mode="single",
-    default=0,
-    key="2",
-)
+selection_commerce = create_button("Type de commerce", commerce_map_bouton)
+selection_presentation = create_button("Présentation", presentation_map_bouton)
 
 # Création du dataframe
 df_chart = population_charts_between_interval(df_communes, 
@@ -205,14 +225,10 @@ titre = f"Part de la population habitant à X minutes ou moins " \
 commerce = commerce_map[selection_commerce]
 df_select = df_chart[df_chart["type"]==commerce]
 
-fig = px.line(
-	df_select, x="temps", y="pourcentage", color="transport_label", 
-	markers=True, labels=labels,
-)
-fig.update_layout(
-	title_text=titre,
-	yaxis_tickformat='.2%'
-	)
+if selection_presentation == 0:
+	fig = create_line_chart(df_select, labels, titre, kwargs)
+elif selection_presentation == 1:
+	fig = create_bar_chart(df_select, labels, titre, kwargs)
 st.plotly_chart(fig)
 
 
@@ -221,22 +237,9 @@ st.header("Résultats par type de transport")
 # ------------------------------
 
 # Boutons
-selection_commerce = st.segmented_control(
-    "Type de commerce",
-    options=commerce_map_bouton.keys(),
-    format_func=lambda option: commerce_map_bouton[option],
-    selection_mode="single",
-    default=0,
-    key="3",
-)
-
-selection_transport = st.segmented_control(
-    "Type de transport",
-    options=transport_map_bouton.keys(),
-    format_func=lambda option: transport_map_bouton[option],
-    selection_mode="single",
-    default=0,
-)
+selection_commerce = create_button("Type de commerce", commerce_map_bouton)
+selection_transport = create_button("Type de transport", transport_map_bouton)
+selection_presentation = create_button("Présentation", presentation_map_bouton, default=1)
 
 # Création du dataframe
 df_charts = pd.concat(liste_df_charts)
@@ -262,20 +265,15 @@ mapping = {
 }
 df_select["max_pop"] = df_select["maximum"].map(mapping)
 
-fig = px.bar(
-		df_select, 
-		x="temps", y="pourcentage", color="max_pop", barmode="group",
-		labels=labels,
-	)
-
 commerce_legend = commerce_map_legend[selection_commerce]
 transport_legend = transport_map_legend[selection_transport]
 
 titre = f"Part de la population habitant à X minutes ou moins " \
 		f"d'{commerce_legend} {transport_legend}"
+kwargs = {"color":"max_pop"}
 
-fig.update_layout(
-	title_text=titre,
-	yaxis_tickformat='.2%'
-	)
+if selection_presentation == 0:
+	fig = create_line_chart(df_select, labels, titre, kwargs)
+elif selection_presentation == 1:
+	fig = create_bar_chart(df_select, labels, titre, kwargs)
 st.plotly_chart(fig)
