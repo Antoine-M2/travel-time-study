@@ -218,7 +218,7 @@ mapping = {
 	100_000    :"50 000 - 99 999 hab.",
 	100_000_000:"100 000+ hab.",
 }
-df_select.loc["max_pop"] = df_select["maximum"].map(mapping)
+df_select["max_pop"] = df_select["maximum"].map(mapping)
 
 commerce_legend = commerce_map_legend[selection_commerce]
 transport_legend = transport_map_legend[selection_transport]
