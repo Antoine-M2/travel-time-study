@@ -33,7 +33,6 @@ transport_map_legend = {
     1: "à vélo électrique",
     2: "à vélo",
 }
-
 presentation_map_bouton = {
     0: "📈 Courbes",
     1: "📊 Barres",
@@ -153,7 +152,7 @@ for df, tab in zip(liste_df_charts, liste_tabs):
 
 
 # ------------------------------
-st.subheader("Sélectionnez l'intervalle")
+st.subheader("Sélectionnez l'intervalle de population")
 # ------------------------------
 
 intervalle = st.slider("Sélectionnez un intervalle de population :", 
@@ -219,7 +218,7 @@ mapping = {
 	100_000    :"50 000 - 99 999 hab.",
 	100_000_000:"100 000+ hab.",
 }
-df_select["max_pop"] = df_select["maximum"].map(mapping)
+df_select.loc["max_pop"] = df_select["maximum"].map(mapping)
 
 commerce_legend = commerce_map_legend[selection_commerce]
 transport_legend = transport_map_legend[selection_transport]
