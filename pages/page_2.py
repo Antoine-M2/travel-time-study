@@ -35,7 +35,7 @@ transport_map_legend = {
 }
 
 presentation_map_bouton = {
-    0: "📈 Lignes",
+    0: "📈 Courbes",
     1: "📊 Barres",
 }
 
@@ -51,7 +51,7 @@ df_communes = load_data("processed/data/pop_iso_communes_final.csv")
 # ------------------------------
 
 def create_button(nom, mapping, default=0):
-
+	"""Fonction créant un bouton d'interface streamlit."""
     try:
         create_button.counter += 1
     except AttributeError:
@@ -67,38 +67,6 @@ def create_button(nom, mapping, default=0):
     )
 
     return bouton
-
-
-def population_charts_between_interval(df_communes, minimum=0, maximum=100_000_000):
-	cols = df_communes.columns[10:]
-	df_select = df_communes[
-		(df_communes["population"] >= minimum) & (df_communes["population"] < maximum)
-	]
-
-	df_chart = pd.DataFrame(columns=["type", "transport", "temps", "pourcentage"])
-	for i, col in enumerate(cols):
-		df_chart.loc[i] = col.split('_') + [df_select[col].sum()/df_select["population"].sum()]
-	df_chart["temps"] = df_chart["temps"].apply(int) // 60
-
-	# st.write(df_select[["DCOE_L_LIB", "population"]].sort_values(by=["population"], ascending=False))
-
-	#
-	mapping_order= {
-	    "driving-car"      : 0,
-	    "cycling-electric" : 1,
-	    "cycling-regular"  : 2,
-	}
-	df_chart = df_chart.sort_values(by="transport", key=lambda col: col.map(mapping_order))
-	df_chart = df_chart.sort_values(by="temps")
-
-	mapping = {
-		"driving-car":     "Voiture", 
-		"cycling-electric":"Vélo électrique",
-		"cycling-regular": "Vélo"
-	}
-	df_chart["transport_label"] = df_chart["transport"].map(mapping)
-	df_chart["maximum"] = maximum
-	return df_chart
 
 
 # ------------------------------

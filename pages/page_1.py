@@ -8,12 +8,13 @@ import folium
 
 st.title("Présentation du projet")
 
+
 # ------------------------------
 # Fonctions
 # ------------------------------
 
 def chargement_isochrone(df):
-
+    """Fonction qui transforme les données brutes en format GeoPandas."""
     try:
         chargement_isochrone.counter += 1
     except AttributeError:
@@ -103,6 +104,7 @@ carte = gdf.explore(column="minutes",
 carte.fit_bounds([sw, ne])
 st.components.v1.html(folium.Figure().add_child(carte).render(), height=600, width=800)
 
+
 # ------------------------------
 # Paragraphe
 # ------------------------------
@@ -125,6 +127,7 @@ dans le Calvados :
 )
 st.write(markdown_text)
 
+
 # ------------------------------
 # Visualisation isochrone
 # ------------------------------
@@ -138,6 +141,7 @@ carte = gdf.explore(column="minutes",
                 legend_kwds={"max_labels":5}
                 )
 st.components.v1.html(folium.Figure().add_child(carte).render(), height=600, width=800)
+
 
 # ------------------------------
 # Paragraphe
