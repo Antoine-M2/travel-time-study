@@ -52,21 +52,21 @@ df_communes = load_data("processed/data/pop_iso_communes_final.csv")
 
 def create_button(nom, mapping, default=0):
 	"""Fonction créant un bouton d'interface streamlit."""
-    try:
-        create_button.counter += 1
-    except AttributeError:
-        create_button.counter = 1
+	try:
+		create_button.counter += 1
+	except AttributeError:
+		create_button.counter = 1
 
-    bouton = st.segmented_control(
-        nom,
-        options=mapping.keys(),
-        format_func=lambda option: mapping[option],
-        selection_mode="single",
-        key=create_button.counter,
-        default=default,
-    )
+	bouton = st.segmented_control(
+		nom,
+		options=mapping.keys(),
+		format_func=lambda option: mapping[option],
+		selection_mode="single",
+		key=create_button.counter,
+		default=default,
+	)
 
-    return bouton
+	return bouton
 
 
 # ------------------------------
