@@ -6,7 +6,7 @@ import geopandas as gpd
 from shapely import wkt
 import folium
 
-st.title("Présentation du projet")
+st.title("Comparaison des moyens de transports pour les trajets quotidiens")
 
 
 # ------------------------------
@@ -136,10 +136,12 @@ sw, ne = [x - pad, y - pad], [x + pad, y + pad]
 carte = gdf.explore(column="minutes", 
                 marker_type="marker",
                 style_kwds={"fillOpacity":0.15}, 
-                legend_kwds={"max_labels":6}
+                legend_kwds={"max_labels":6},
+                min_zoom=10,
+                max_zoom=15,
                 )
 carte.fit_bounds([sw, ne])
-st.components.v1.html(folium.Figure().add_child(carte).render(), height=600, width=800)
+st.components.v1.html(folium.Figure().add_child(carte).render(), height=480, width=600)
 
 
 # ------------------------------
@@ -175,9 +177,11 @@ gdf = chargement_isochrone(df)
 carte = gdf.explore(column="minutes", 
                 marker_type="marker",
                 style_kwds={"fillOpacity":0.15}, 
-                legend_kwds={"max_labels":5}
+                legend_kwds={"max_labels":5},
+                min_zoom=9,
+                max_zoom=15,
                 )
-st.components.v1.html(folium.Figure().add_child(carte).render(), height=600, width=800)
+st.components.v1.html(folium.Figure().add_child(carte).render(), height=480, width=600)
 
 
 # ------------------------------

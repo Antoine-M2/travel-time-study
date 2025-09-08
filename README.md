@@ -1,5 +1,8 @@
 # travel-time-study
 
+L'application streamlit est en ligne via ce lien :
+https://comparaison-trajets-voiture-velo.streamlit.app/
+
 #### Introduction
  
 Ma principale motivation pour construire ce site et la base de données
