@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+from utilities import *
+
 st.title("Résultats")
 
 commerce_map = {
@@ -48,28 +50,6 @@ df_communes = load_data("processed/data/pop_iso_communes_final.csv")
 # Fonctions
 # ------------------------------
 
-def create_line_chart(df, labels, titre, kwargs={}):
-
-	fig = px.line(
-		df, x="temps", y="pourcentage", labels=labels, markers=True, **kwargs,
-	)
-	fig.update_layout(
-		title_text=titre,
-		yaxis_tickformat='.2%',
-	)
-	return fig
-
-def create_bar_chart(df, labels, titre, kwargs={}):
-
-	fig = px.bar(
-		df, x="temps", y="pourcentage", labels=labels, barmode="group", **kwargs,
-	)
-	fig.update_layout(
-		title_text=titre,
-		yaxis_tickformat='.2%',
-		)
-	return fig
-
 def create_button(nom, mapping, default=0):
 
     try:
@@ -102,6 +82,15 @@ def population_charts_between_interval(df_communes, minimum=0, maximum=100_000_0
 
 	# st.write(df_select[["DCOE_L_LIB", "population"]].sort_values(by=["population"], ascending=False))
 
+	#
+	mapping_order= {
+	    "driving-car"      : 0,
+	    "cycling-electric" : 1,
+	    "cycling-regular"  : 2,
+	}
+	df_chart = df_chart.sort_values(by="transport", key=lambda col: col.map(mapping_order))
+	df_chart = df_chart.sort_values(by="temps")
+
 	mapping = {
 		"driving-car":     "Voiture", 
 		"cycling-electric":"Vélo électrique",
@@ -117,8 +106,8 @@ st.header("Résultats pour toute la France métropolitaine")
 # ------------------------------
 
 # Bouton
-selection_commerce = create_button("Type de commerce", commerce_map_bouton)
 selection_presentation = create_button("Présentation", presentation_map_bouton)
+selection_commerce = create_button("Type de commerce", commerce_map_bouton)
 
 # Création du dataframe
 df_chart = population_charts_between_interval(df_communes)
@@ -150,8 +139,8 @@ st.header("Résultats par taille de communes")
 # ------------------------------
 
 # Bouton
-selection_commerce = create_button("Type de commerce", commerce_map_bouton)
 selection_presentation = create_button("Présentation", presentation_map_bouton)
+selection_commerce = create_button("Type de commerce", commerce_map_bouton)
 
 # Création des dataframes
 df_chart_1 = population_charts_between_interval(df_communes, minimum=100_000)
@@ -163,7 +152,7 @@ df_chart_6 = population_charts_between_interval(df_communes, maximum=1_000)
 liste_df_charts = [df_chart_1, df_chart_2, df_chart_3, df_chart_4, df_chart_5, df_chart_6]
 
 # Affichage des données
-tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(
+liste_tabs = st.tabs(
 		[
 			"100 000+ hab.",
 			"50 000 - 99 999 hab.",
@@ -173,7 +162,6 @@ tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(
 			"Moins de 1 000 hab.",
 		]
 )
-liste_tabs = [tab1, tab2, tab3, tab4, tab5, tab6]
 
 labels = {
 	"temps":"Temps de trajet (en min)",
@@ -204,8 +192,8 @@ intervalle = st.slider("Sélectionnez un intervalle de population :",
 						0, 100_000, (2_000, 50_000), step=50)
 
 # Bouton
-selection_commerce = create_button("Type de commerce", commerce_map_bouton)
 selection_presentation = create_button("Présentation", presentation_map_bouton)
+selection_commerce = create_button("Type de commerce", commerce_map_bouton)
 
 # Création du dataframe
 df_chart = population_charts_between_interval(df_communes, 
@@ -237,9 +225,9 @@ st.header("Résultats par type de transport")
 # ------------------------------
 
 # Boutons
+selection_presentation = create_button("Présentation", presentation_map_bouton, default=1)
 selection_commerce = create_button("Type de commerce", commerce_map_bouton)
 selection_transport = create_button("Type de transport", transport_map_bouton)
-selection_presentation = create_button("Présentation", presentation_map_bouton, default=1)
 
 # Création du dataframe
 df_charts = pd.concat(liste_df_charts)

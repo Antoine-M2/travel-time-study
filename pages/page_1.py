@@ -6,7 +6,7 @@ import geopandas as gpd
 from shapely import wkt
 import folium
 
-st.title("Accueil")
+st.title("Présentation du projet")
 
 # ------------------------------
 # Fonctions
@@ -97,7 +97,7 @@ sw, ne = [x - pad, y - pad], [x + pad, y + pad]
 
 carte = gdf.explore(column="minutes", 
                 marker_type="marker",
-                style_kwds={"fillOpacity":0.25}, 
+                style_kwds={"fillOpacity":0.15}, 
                 legend_kwds={"max_labels":6}
                 )
 carte.fit_bounds([sw, ne])
@@ -134,7 +134,7 @@ gdf = chargement_isochrone(df)
 
 carte = gdf.explore(column="minutes", 
                 marker_type="marker",
-                style_kwds={"fillOpacity":0.25}, 
+                style_kwds={"fillOpacity":0.15}, 
                 legend_kwds={"max_labels":5}
                 )
 st.components.v1.html(folium.Figure().add_child(carte).render(), height=600, width=800)
