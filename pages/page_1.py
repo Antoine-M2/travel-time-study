@@ -6,7 +6,7 @@ import geopandas as gpd
 from shapely import wkt
 import folium
 
-st.title("Comparaison des moyens de transports pour les trajets quotidiens")
+st.title("Comparaison des moyens de transports individuels pour les trajets quotidiens")
 
 
 # ------------------------------
