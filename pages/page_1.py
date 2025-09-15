@@ -64,8 +64,8 @@ st.header("Introduction")
 
 markdown_text = (
 """
-Ma principale motivation pour construire ce site et la base de données
-l'alimentant était la suivante : 
+Ma principale motivation pour construire ce site, et la base de données
+l'alimentant, était la suivante : 
 
 Les infrastructures de transport, pour les déplacements
 du quotidien, sont construites principalement pour les voitures.

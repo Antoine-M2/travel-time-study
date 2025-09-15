@@ -111,7 +111,7 @@ if options:
 		df_option = df[df["nom"].isin([option])]
 		df_chart = population_charts_between_interval(df_option)
 
-		tab.write(f"Population de la commune: {int(df_option["population"].iloc[0])}")
+		tab.write(f"Population de la commune (2022) : {int(df_option["population_2022"].iloc[0])}")
 
 		commerce = commerce_map[selection_commerce]
 		df_select = df_chart[df_chart["type"]==commerce]

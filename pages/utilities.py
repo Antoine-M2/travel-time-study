@@ -10,6 +10,7 @@ def create_line_chart(df, labels, titre, kwargs={}):
 	fig.update_layout(
 		title_text=titre,
 		yaxis_tickformat='.2%',
+		legend = dict(orientation="h", xanchor="center", x=0.5, y=-0.25),
 	)
 	return fig
 
@@ -21,6 +22,7 @@ def create_bar_chart(df, labels, titre, kwargs={}):
 	fig.update_layout(
 		title_text=titre,
 		yaxis_tickformat='.2%',
+		legend = dict(orientation="h", xanchor="center", x=0.5, y=-0.25),
 	)
 	return fig
 
