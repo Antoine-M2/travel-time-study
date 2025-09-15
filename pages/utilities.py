@@ -2,25 +2,25 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-def create_line_chart(df, labels, titre, kwargs={}):
+def create_line_chart(df, labels, kwargs={}):
 	"""Fonction créant un graphique en courbes."""
 	fig = px.line(
 		df, x="temps", y="pourcentage", labels=labels, markers=True, **kwargs,
 	)
 	fig.update_layout(
-		title_text=titre,
+		#title_text=titre,
 		yaxis_tickformat='.2%',
 		legend = dict(orientation="h", xanchor="center", x=0.5, y=-0.25),
 	)
 	return fig
 
-def create_bar_chart(df, labels, titre, kwargs={}):
+def create_bar_chart(df, labels, kwargs={}):
 	"""Fonction créant un graphique en barres."""
 	fig = px.bar(
 		df, x="temps", y="pourcentage", labels=labels, barmode="group", **kwargs,
 	)
 	fig.update_layout(
-		title_text=titre,
+		#title_text=titre,
 		yaxis_tickformat='.2%',
 		legend = dict(orientation="h", xanchor="center", x=0.5, y=-0.25),
 	)

@@ -89,15 +89,16 @@ labels = {
 commerce_legend = commerce_map_legend[selection_commerce]
 titre = f"Part de la population habitant à X minutes ou moins " \
 		f"d'{commerce_legend}"
+st.markdown(f"**{titre}**")
 
 commerce = commerce_map[selection_commerce]
 df_select = df_chart[df_chart["type"]==commerce]
 kwargs = {"color":"transport_label"}
 
 if selection_presentation == 0:
-	fig = create_line_chart(df_select, labels, titre, kwargs)
+	fig = create_line_chart(df_select, labels, kwargs)
 elif selection_presentation == 1:
-	fig = create_bar_chart(df_select, labels, titre, kwargs)
+	fig = create_bar_chart(df_select, labels, kwargs)
 st.plotly_chart(fig)
 
 
@@ -144,10 +145,12 @@ for df, tab in zip(liste_df_charts, liste_tabs):
 	commerce = commerce_map[selection_commerce]
 	df_select = df[df["type"]==commerce]
 
+	tab.markdown(f"**{titre}**")
+
 	if selection_presentation == 0:
-		fig = create_line_chart(df_select, labels, titre, kwargs)
+		fig = create_line_chart(df_select, labels, kwargs)
 	elif selection_presentation == 1:
-		fig = create_bar_chart(df_select, labels, titre, kwargs)
+		fig = create_bar_chart(df_select, labels, kwargs)
 	tab.plotly_chart(fig)
 
 
@@ -176,14 +179,15 @@ labels = {
 commerce_legend = commerce_map_legend[selection_commerce]
 titre = f"Part de la population habitant à X minutes ou moins " \
 		f"d'{commerce_legend}"
+st.markdown(f"**{titre}**")
 
 commerce = commerce_map[selection_commerce]
 df_select = df_chart[df_chart["type"]==commerce]
 
 if selection_presentation == 0:
-	fig = create_line_chart(df_select, labels, titre, kwargs)
+	fig = create_line_chart(df_select, labels, kwargs)
 elif selection_presentation == 1:
-	fig = create_bar_chart(df_select, labels, titre, kwargs)
+	fig = create_bar_chart(df_select, labels, kwargs)
 st.plotly_chart(fig)
 
 
@@ -225,10 +229,12 @@ transport_legend = transport_map_legend[selection_transport]
 
 titre = f"Part de la population habitant à X minutes ou moins " \
 		f"d'{commerce_legend} {transport_legend}"
+st.markdown(f"**{titre}**")
+
 kwargs = {"color":"max_pop"}
 
 if selection_presentation == 0:
-	fig = create_line_chart(df_select, labels, titre, kwargs)
+	fig = create_line_chart(df_select, labels, kwargs)
 elif selection_presentation == 1:
-	fig = create_bar_chart(df_select, labels, titre, kwargs)
+	fig = create_bar_chart(df_select, labels, kwargs)
 st.plotly_chart(fig)

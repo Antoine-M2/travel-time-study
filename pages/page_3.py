@@ -112,15 +112,16 @@ if options:
 		df_chart = population_charts_between_interval(df_option)
 
 		tab.write(f"Population de la commune (2022) : {int(df_option["population_2022"].iloc[0])}")
+		tab.markdown(f"**{titre}**")
 
 		commerce = commerce_map[selection_commerce]
 		df_select = df_chart[df_chart["type"]==commerce]
 		kwargs = {"color":"transport_label"}
 
 		if selection_presentation == 0:
-			fig = create_line_chart(df_select, labels, titre, kwargs)
+			fig = create_line_chart(df_select, labels, kwargs)
 		elif selection_presentation == 1:
-			fig = create_bar_chart(df_select, labels, titre, kwargs)
+			fig = create_bar_chart(df_select, labels, kwargs)
 		tab.plotly_chart(fig)
 
 
@@ -160,10 +161,12 @@ if options:
 
 	titre = f"Part de la population habitant à X minutes ou moins " \
 			f"d'{commerce_legend} {transport_legend}"
+	st.markdown(f"**{titre}**")
+	
 	kwargs = {"color":"nom"}
 
 	if selection_presentation == 0:
-		fig = create_line_chart(df_select, labels, titre, kwargs)
+		fig = create_line_chart(df_select, labels, kwargs)
 	elif selection_presentation == 1:
-		fig = create_bar_chart(df_select, labels, titre, kwargs)
+		fig = create_bar_chart(df_select, labels, kwargs)
 	st.plotly_chart(fig)
