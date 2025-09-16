@@ -44,7 +44,7 @@ def population_charts_between_interval(df_communes, minimum=0, maximum=100_000_0
 
 	"""
 	df_select = df_communes[
-		(df_communes["population"] >= minimum) & (df_communes["population"] < maximum)
+		(df_communes["population_2022"] >= minimum) & (df_communes["population_2022"] < maximum)
 	]
 
 	cols = df_select.columns[df_select.columns.str.contains("driving-car|cycling-electric|cycling-regular")]
