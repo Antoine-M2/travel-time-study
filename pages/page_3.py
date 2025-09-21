@@ -11,14 +11,23 @@ st.title("Comparer des communes")
 commerce_map = {
     0: "bakery",
     1: "supermarket",
+    2: "convenience",
+    3: "post-office",
+    4: "pharmacy",
 }
 commerce_map_bouton = {
     0: "🥖 Boulangeries",
     1: "🛒 Supermarchés",
+    2: "🏪 Supérettes",
+    3: "📮 Bureaux de poste",
+    4: "💊 Pharmacies",
 }
 commerce_map_legend = {
     0: "une boulangerie",
     1: "un supermarché",
+    2: "une supérette",
+    3: "un bureau de poste",
+    4: "une pharmacie",
 }
 transport_map = {
     0: "driving-car",
@@ -67,7 +76,7 @@ def create_button(nom, mapping, default=0):
 def load_data(url):
 	df_communes = pd.read_csv(url, engine="python")
 	#Création d'un nom unique (nom commune + département)
-	col = df_communes["DCOE_L_LIB"] + " (" + df_communes["DDEP_C_COD"] + ")"
+	col = df_communes["Nom_commune"] + " (" + df_communes["Code_departement"] + ")"
 	df_communes.insert(0, 'nom', col)
 
 	return df_communes

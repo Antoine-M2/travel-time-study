@@ -6,15 +6,21 @@ import geopandas as gpd
 from shapely import wkt
 import folium
 
-st.title("Carte interactive")
+st.title("Carte interactive par département")
 
 commerce_map = {
     0: "bakery",
     1: "supermarket",
+    2: "convenience",
+    3: "post-office",
+    4: "pharmacy",
 }
 commerce_map_bouton = {
     0: "🥖 Boulangeries",
     1: "🛒 Supermarchés",
+    2: "🏪 Supérettes",
+    3: "📮 Bureaux de poste",
+    4: "💊 Pharmacies",
 }
 transport_map = {
     0: "driving-car",
@@ -85,17 +91,17 @@ gdf = chargement_isochrone(df)
 
 options = st.selectbox(
     "Barre de recherche",
-    df["DEPARTEMEN"].unique(),
+    df["Nom_departement"].unique(),
     placeholder="Sélectionnez un département...",
 )
 
 # Affichage des données
 column_select = commerce + "_" + transport + "_" + temps
 
-gdf = gdf[gdf["DEPARTEMEN"] == options]
+gdf = gdf[gdf["Nom_departement"] == options]
 gdf["pourcentage"] = round((gdf[column_select] / gdf["population"])*100, 2)
-gdf = gdf.loc[:, ["geometry", "DCOE_L_LIB", "population_2022", "pourcentage"]]
-gdf = gdf.rename(columns={"DCOE_L_LIB":"commune"})
+gdf = gdf.loc[:, ["geometry", "Nom_commune", "population_2022", "pourcentage"]]
+gdf = gdf.rename(columns={"Nom_commune":"commune"})
 
 carte = gdf.explore(column="pourcentage", 
                     style_kwds={"fillOpacity":0.3},

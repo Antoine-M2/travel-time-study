@@ -93,9 +93,14 @@ de France métropolitaine [sur cette page](./page_2).
 Vous pouvez aussi chercher dans la base de données des communes pour les 
 comparer (jusqu'à 6) [sur cette page](./page_3).
 
+[Sur cette page](./page_4), vous pouvez comparer les communes par département
+sur une carte interactive. 
+
 Les données ne concernent pour l'instant que les communes de France 
-métropolitaine, et seulement les supermarchés et les boulangeries.
-Mais le site sera prochainement mis à jour avec de nouvelles données !
+métropolitaine pour les commerces suivant : boulangeries, supermarchés, supérettes, 
+bureaux de poste et pharmacies.
+Le site sera prochainement mis à jour avec de nouvelles données et de nouvelles
+fonctionnalités !
 """
 )
 st.write(markdown_text)

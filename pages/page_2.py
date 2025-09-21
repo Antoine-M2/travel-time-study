@@ -4,19 +4,28 @@ import plotly.express as px
 
 from utilities import *
 
-st.title("Résultats")
+st.title("Résultats généraux")
 
 commerce_map = {
     0: "bakery",
     1: "supermarket",
+    2: "convenience",
+    3: "post-office",
+    4: "pharmacy",
 }
 commerce_map_bouton = {
     0: "🥖 Boulangeries",
     1: "🛒 Supermarchés",
+    2: "🏪 Supérettes",
+    3: "📮 Bureaux de poste",
+    4: "💊 Pharmacies",
 }
 commerce_map_legend = {
     0: "une boulangerie",
     1: "un supermarché",
+    2: "une supérette",
+    3: "un bureau de poste",
+    4: "une pharmacie",
 }
 transport_map = {
     0: "driving-car",
