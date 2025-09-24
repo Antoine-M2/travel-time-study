@@ -146,7 +146,7 @@ carte = gdf.explore(column="minutes",
                 max_zoom=15,
                 )
 carte.fit_bounds([sw, ne])
-st.components.v1.html(folium.Figure().add_child(carte).render(), height=480, width=600)
+st.components.v1.html(folium.Figure().add_child(carte).render(), height=480, width=800)
 
 
 # ------------------------------
@@ -186,7 +186,7 @@ carte = gdf.explore(column="minutes",
                 min_zoom=9,
                 max_zoom=15,
                 )
-st.components.v1.html(folium.Figure().add_child(carte).render(), height=480, width=600)
+st.components.v1.html(folium.Figure().add_child(carte).render(), height=480, width=800)
 
 
 # ------------------------------

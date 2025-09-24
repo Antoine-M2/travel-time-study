@@ -2,6 +2,65 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+# ------------------------------
+# Variables communes à toutes les pages
+# ------------------------------
+
+commerce_map = {
+    0: "bakery",
+    1: "supermarket",
+    2: "convenience",
+    3: "post-office",
+    4: "pharmacy",
+}
+commerce_map_bouton = {
+    0: "🥖 Boulangeries",
+    1: "🛒 Supermarchés",
+    2: "🏪 Supérettes",
+    3: "📮 Bureaux de poste",
+    4: "💊 Pharmacies",
+}
+commerce_map_legend = {
+    0: "une boulangerie",
+    1: "un supermarché",
+    2: "une supérette",
+    3: "un bureau de poste",
+    4: "une pharmacie",
+}
+transport_map = {
+    0: "driving-car",
+    1: "cycling-electric",
+    2: "cycling-regular",
+}
+transport_map_bouton = {
+    0: "🚗 Voiture",
+    1: "🔋Vélo électrique ",
+    2: "🚲 Vélo",
+}
+transport_map_legend = {
+    0: "en voiture",
+    1: "à vélo électrique",
+    2: "à vélo",
+}
+presentation_map_bouton = {
+    0: "📈 Courbes",
+    1: "📊 Barres",
+}
+
+temps_map_bouton = {
+    0: "5",
+    1: "10",
+    2: "15",
+    3: "20",
+    4: "25",
+    5: "30",
+}
+
+
+# ------------------------------
+# Fonctions
+# ------------------------------
+
 def create_line_chart(df, labels, kwargs={}):
 	"""Fonction créant un graphique en courbes."""
 	fig = px.line(

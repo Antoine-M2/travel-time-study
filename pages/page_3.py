@@ -4,56 +4,22 @@ import plotly.express as px
 
 from utilities import *
 
-#import numpy as np
-
 st.title("Comparer des communes")
-
-commerce_map = {
-    0: "bakery",
-    1: "supermarket",
-    2: "convenience",
-    3: "post-office",
-    4: "pharmacy",
-}
-commerce_map_bouton = {
-    0: "🥖 Boulangeries",
-    1: "🛒 Supermarchés",
-    2: "🏪 Supérettes",
-    3: "📮 Bureaux de poste",
-    4: "💊 Pharmacies",
-}
-commerce_map_legend = {
-    0: "une boulangerie",
-    1: "un supermarché",
-    2: "une supérette",
-    3: "un bureau de poste",
-    4: "une pharmacie",
-}
-transport_map = {
-    0: "driving-car",
-    1: "cycling-electric",
-    2: "cycling-regular",
-}
-transport_map_bouton = {
-    0: "🚗 Voiture",
-    1: "🔋Vélo électrique ",
-    2: "🚲 Vélo",
-}
-transport_map_legend = {
-    0: "en voiture",
-    1: "à vélo électrique",
-    2: "à vélo",
-}
-presentation_map_bouton = {
-    0: "📈 Courbes",
-    1: "📊 Barres",
-}
-
 
 # ------------------------------
 # Fonctions
 # ------------------------------
 
+@st.cache_data
+def load_data(url):
+	"""Fonction chargeant les données en dataframe Pandas."""
+	df_communes = pd.read_csv(url, engine="python")
+	#Création d'un nom unique (nom commune + département)
+	col = df_communes["Nom_commune"] + " (" + df_communes["Code_departement"] + ")"
+	df_communes.insert(0, 'nom', col)
+
+	return df_communes
+	
 def create_button(nom, mapping, default=0):
 	"""Fonction créant un bouton d'interface streamlit."""
 	try:
@@ -71,15 +37,6 @@ def create_button(nom, mapping, default=0):
 	)
 
 	return bouton
-
-@st.cache_data
-def load_data(url):
-	df_communes = pd.read_csv(url, engine="python")
-	#Création d'un nom unique (nom commune + département)
-	col = df_communes["Nom_commune"] + " (" + df_communes["Code_departement"] + ")"
-	df_communes.insert(0, 'nom', col)
-
-	return df_communes
 
 
 # ------------------------------
