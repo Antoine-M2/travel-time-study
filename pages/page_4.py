@@ -6,6 +6,8 @@ import geopandas as gpd
 from shapely import wkt
 import folium
 
+from streamlit.delta_generator import DeltaGenerator
+
 from utilities import *
 
 st.title("Carte interactive par département")
@@ -15,14 +17,14 @@ st.title("Carte interactive par département")
 # ------------------------------
 
 @st.cache_data
-def load_data_geopandas(url):
+def load_data_geopandas(url:str) -> gpd.GeoDataFrame():
     """Fonction qui transforme les données brutes en format GeoPandas."""
     df = pd.read_csv("processed/data/pop_iso_communes_final.csv", engine="python")
     df['geometry'] = df['geometry'].apply(wkt.loads)
     gdf = gpd.GeoDataFrame(df, crs='epsg:4326')
     return gdf
 
-def create_button(nom, mapping, default=0):
+def create_button(nom:str, mapping:dict, default:int=0) -> "DeltaGenerator":
     """Fonction créant un bouton d'interface streamlit."""
     try:
         create_button.counter += 1

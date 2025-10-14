@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+from streamlit.delta_generator import DeltaGenerator
+
 from utilities import *
 
 st.title("Comparer des communes")
@@ -11,7 +13,7 @@ st.title("Comparer des communes")
 # ------------------------------
 
 @st.cache_data
-def load_data(url):
+def load_data(url:str) -> pd.DataFrame():
 	"""Fonction chargeant les données en dataframe Pandas."""
 	df_communes = pd.read_csv(url, engine="python")
 	#Création d'un nom unique (nom commune + département)
@@ -20,7 +22,7 @@ def load_data(url):
 
 	return df_communes
 	
-def create_button(nom, mapping, default=0):
+def create_button(nom:str, mapping:dict, default:int=0) -> "DeltaGenerator":
 	"""Fonction créant un bouton d'interface streamlit."""
 	try:
 		create_button.counter += 1

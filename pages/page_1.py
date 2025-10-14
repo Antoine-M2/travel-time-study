@@ -13,7 +13,7 @@ st.title("Comparaison des moyens de transports individuels pour les trajets quot
 # Fonctions
 # ------------------------------
 
-def chargement_isochrone(df):
+def chargement_isochrone(df:pd.DataFrame()) -> gpd.GeoDataFrame():
     """Fonction qui transforme les données brutes en format GeoPandas."""
     try:
         chargement_isochrone.counter += 1

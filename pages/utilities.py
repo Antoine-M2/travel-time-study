@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 
 # ------------------------------
 # Variables communes à toutes les pages
@@ -61,7 +62,7 @@ temps_map_bouton = {
 # Fonctions
 # ------------------------------
 
-def create_line_chart(df, labels, kwargs={}):
+def create_line_chart(df:pd.DataFrame, labels:dict, kwargs:dict={}) -> go.Figure():
 	"""Fonction créant un graphique en courbes."""
 	fig = px.line(
 		df, x="temps", y="pourcentage", labels=labels, markers=True, **kwargs,
@@ -73,7 +74,7 @@ def create_line_chart(df, labels, kwargs={}):
 	)
 	return fig
 
-def create_bar_chart(df, labels, kwargs={}):
+def create_bar_chart(df:pd.DataFrame, labels:dict, kwargs:dict={}) -> go.Figure():
 	"""Fonction créant un graphique en barres."""
 	fig = px.bar(
 		df, x="temps", y="pourcentage", labels=labels, barmode="group", **kwargs,
@@ -85,7 +86,7 @@ def create_bar_chart(df, labels, kwargs={}):
 	)
 	return fig
 
-def population_charts(df_communes, densite=0):
+def population_charts(df_communes:pd.DataFrame, densite:int=0) -> pd.DataFrame:
 	"""Fonction permettant de transformer les données brutes des communes.
 
 	Elle permet de transformer les données afin d'obtenir un nouveau tableau 
