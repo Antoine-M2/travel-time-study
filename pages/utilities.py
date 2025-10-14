@@ -85,26 +85,25 @@ def create_bar_chart(df, labels, kwargs={}):
 	)
 	return fig
 
-def population_charts_between_interval(df_communes, minimum=0, maximum=100_000_000):
+def population_charts(df_communes, densite=0):
 	"""Fonction permettant de transformer les données brutes des communes.
 
-	Elle permet de filter les communes selon leur population, puis de 
-	transformer les données afin d'obtenir un nouveau tableau contenant le 
-	pourcentage de population pour chaque paramètre : type de commerce,
+	Elle permet de transformer les données afin d'obtenir un nouveau tableau 
+	contenant le  pourcentage de population pour chaque paramètre : type de commerce,
 	type de transport et intervalle de temps.
 
 	Args:
 		df_communes: La base de données à transformer.
-		minimum: Sélectionne la population minimum à garder.
-		maximum: Sélectionne la population maximum à garder.
+		densite: Densité de la commune (1 = le plus dense, 7 = le moins dense)
 	
 	Returns:
 		df_chart : Le tableau de données transformé.
 
 	"""
-	df_select = df_communes[
-		(df_communes["population_2022"] >= minimum) & (df_communes["population_2022"] < maximum)
-	]
+	if densite == 0:
+		df_select = df_communes
+	else:
+		df_select = df_communes[df_communes["DENS7"] == densite]
 
 	cols = df_select.columns[df_select.columns.str.contains("driving-car|cycling-electric|cycling-regular")]
 	df_chart = pd.DataFrame(columns=["type", "transport", "temps", "pourcentage"])
@@ -126,5 +125,5 @@ def population_charts_between_interval(df_communes, minimum=0, maximum=100_000_0
 		"cycling-regular": "Vélo"
 	}
 	df_chart["transport_label"] = df_chart["transport"].map(mapping)
-	df_chart["maximum"] = maximum
+	df_chart["densite"] = densite
 	return df_chart

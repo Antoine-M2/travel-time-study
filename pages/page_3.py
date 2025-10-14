@@ -75,7 +75,7 @@ if options:
 	for option, tab in zip(options, liste_tabs):
 
 		df_option = df[df["nom"].isin([option])]
-		df_chart = population_charts_between_interval(df_option)
+		df_chart = population_charts(df_option)
 
 		tab.write(f"Population de la commune (2022) : {int(df_option["population_2022"].iloc[0])}")
 		tab.markdown(f"**{titre}**")
@@ -104,7 +104,7 @@ if options:
 	liste_df_charts = []
 	for option in options:
 		df_option = df[df["nom"].isin([option])]
-		df_chart = population_charts_between_interval(df_option)
+		df_chart = population_charts(df_option)
 		df_chart["nom"] = str(df_option["nom"].iloc[0])
 		liste_df_charts.append(df_chart)
 
